@@ -55,7 +55,7 @@ public class Main extends ApplicationAdapter {
             spawnTimer += delta;
             if (spawnTimer >= spawnInterval) {
                 spawnTimer = 0;
-                movingObstacles.add(new MovingObstacle(30, 30, 150)); // taille + vitesse
+                movingObstacles.add(new MovingObstacle(64, 64, 150)); // Taille + vitesse
             }
 
             // Mise à jour des obstacles et vérification des collisions
@@ -73,15 +73,11 @@ public class Main extends ApplicationAdapter {
         // Effacer l'écran
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
-        // Dessiner les obstacles
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        for (MovingObstacle obstacle : movingObstacles) {
-            obstacle.render(shapeRenderer);
-        }
-        shapeRenderer.end();
-
-        // Dessiner le joueur
+        // Dessiner les obstacles et le joueur
         batch.begin();
+        for (MovingObstacle obstacle : movingObstacles) {
+            obstacle.render(batch);
+        }
         player.render(batch);
 
         // Afficher le texte "GAME OVER" si le jeu est terminé
@@ -90,7 +86,6 @@ public class Main extends ApplicationAdapter {
             font.draw(batch, "GAME OVER", 200, 400);
             font.draw(batch, "Appuyez sur R pour recommencer", 150, 370);
         }
-
         batch.end();
     }
 

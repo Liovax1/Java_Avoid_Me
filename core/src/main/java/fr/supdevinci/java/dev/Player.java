@@ -18,11 +18,11 @@ public class Player {
 
     public Player() {
         // Chargez le sprite sheet
-        Texture spriteSheet = new Texture("creature.png");
+        Texture spriteSheet = new Texture("player.png");
 
         // Découpez les frames (par exemple, 4 frames de largeur égale)
         int frameWidth = spriteSheet.getWidth() / 4; // 4 frames horizontales
-        int frameHeight = spriteSheet.getHeight();  // 1 seule ligne
+        int frameHeight = spriteSheet.getHeight(); // 1 seule ligne
         TextureRegion[][] tmp = TextureRegion.split(spriteSheet, frameWidth, frameHeight);
         TextureRegion[] frames = new TextureRegion[4]; // 4 frames
         for (int i = 0; i < 4; i++) {
@@ -46,10 +46,14 @@ public class Player {
     }
 
     public void update(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))  x -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x += speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP))    y += speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))  y -= speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            x -= speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            x += speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            y += speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            y -= speed * delta;
         bounds.setPosition(x, y);
     }
 
