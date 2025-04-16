@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.MathUtils;
 
-
 public class MovingObstacle {
     private Animation<TextureRegion> animation;
     private float stateTime;
@@ -20,7 +19,7 @@ public class MovingObstacle {
     public MovingObstacle(float width, float height, float speed) {
         // Sélectionner une image aléatoire parmi les 5 créatures
         String[] creatureFiles = { "creature.png", "creature-2.png", "creature-3.png", "creature-4.png",
-                "creature-5.png" };
+                "creature-5.png", "creature-6.png", "creature-7.png", "creature-8.png", "creature-9.png", "creature-10.png" };
         String selectedCreature = creatureFiles[MathUtils.random(creatureFiles.length - 1)];
 
         // Charger le sprite sheet de la créature sélectionnée
@@ -31,9 +30,7 @@ public class MovingObstacle {
         int frameHeight = spriteSheet.getHeight(); // 1 seule ligne
         TextureRegion[][] tmp = TextureRegion.split(spriteSheet, frameWidth, frameHeight);
         TextureRegion[] frames = new TextureRegion[4];
-        for (int i = 0; i < 4; i++) {
-            frames[i] = tmp[0][i];
-        }
+        System.arraycopy(tmp[0], 0, frames, 0, 4); // Copie les 4 frames de la première ligne
 
         // Créer l'animation
         animation = new Animation<>(0.1f, frames);
@@ -44,21 +41,25 @@ public class MovingObstacle {
         int edge = MathUtils.random(3); // 0: haut, 1: bas, 2: gauche, 3: droite
 
         switch (edge) {
-            case 0: // top
+            case 0: // haut
                 x = MathUtils.random(800);
                 y = 600;
                 break;
-            case 1: // bottom
+            case 1: // bas
                 x = MathUtils.random(800);
                 y = 0 - height;
                 break;
-            case 2: // left
+            case 2: // gauche
                 x = 0 - width;
                 y = MathUtils.random(600);
                 break;
-            case 3: // right
+            case 3: // droite
                 x = 800;
                 y = MathUtils.random(600);
+                break;
+            default:
+                x = 400; // position par defaut (centre)
+                y = 300;
                 break;
         }
 

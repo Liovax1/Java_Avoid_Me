@@ -13,9 +13,16 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+
+import com.badlogic.gdx.utils.viewport.Viewport;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import com.badlogic.gdx.math.MathUtils;
+
+import java.util.logging.Logger;
 
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -26,11 +33,18 @@ public class Main extends ApplicationAdapter {
     private ArrayList<MovingObstacle> movingObstacles;
     private float spawnTimer = 0;
     private float spawnInterval = 1f;
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
+    private Viewport viewport;
+    private OrthographicCamera camera;
 
     @Override
     public void create() {
+        camera = new OrthographicCamera();
+        viewport = new StretchViewport(800, 600, camera);
+        viewport.apply();
+
         batch = new SpriteBatch();
-        player = new Player();
+        player = new Player(viewport); // Passez le viewport au joueur
         shapeRenderer = new ShapeRenderer();
         font = new BitmapFont(); // police par défaut
         movingObstacles = new ArrayList<>();
@@ -48,7 +62,7 @@ public class Main extends ApplicationAdapter {
                 gameOver = false;
                 player.reset();
                 movingObstacles.clear(); // Réinitialiser les obstacles
-                System.out.println("🔁 Partie relancée !");
+                logger.info("🔁 Partie relancée !");
             }
 
             // Générer un nouvel obstacle toutes les secondes
@@ -73,6 +87,10 @@ public class Main extends ApplicationAdapter {
         // Effacer l'écran
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
+        // Mettez à jour la caméra
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
         // Dessiner les obstacles et le joueur
         batch.begin();
         for (MovingObstacle obstacle : movingObstacles) {
@@ -82,11 +100,16 @@ public class Main extends ApplicationAdapter {
 
         // Afficher le texte "GAME OVER" si le jeu est terminé
         if (gameOver) {
-            System.out.println("💀 GAME OVER");
+            logger.info("💀 GAME OVER");
             font.draw(batch, "GAME OVER", 200, 400);
             font.draw(batch, "Appuyez sur R pour recommencer", 150, 370);
         }
         batch.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width, height, true); // Adaptez le viewport à la nouvelle taille
     }
 
     @Override

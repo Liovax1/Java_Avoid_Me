@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
@@ -15,8 +16,11 @@ public class Player {
     private float y;
     private float speed = 200f;
     private Rectangle bounds;
+    private Viewport viewport;
 
-    public Player() {
+    public Player(Viewport viewport) {
+        this.viewport = viewport;
+
         // Chargez le sprite sheet
         Texture spriteSheet = new Texture("player.png");
 
@@ -24,10 +28,8 @@ public class Player {
         int frameWidth = spriteSheet.getWidth() / 4; // 4 frames horizontales
         int frameHeight = spriteSheet.getHeight(); // 1 seule ligne
         TextureRegion[][] tmp = TextureRegion.split(spriteSheet, frameWidth, frameHeight);
-        TextureRegion[] frames = new TextureRegion[4]; // 4 frames
-        for (int i = 0; i < 4; i++) {
-            frames[i] = tmp[0][i]; // Supposons que les frames sont sur la première ligne
-        }
+        TextureRegion[] frames = new TextureRegion[4];
+        System.arraycopy(tmp[0], 0, frames, 0, 4); // Copie les 4 frames de la première ligne
 
         // Créez l'animation (0.1s par frame)
         animation = new Animation<>(0.1f, frames);
@@ -46,16 +48,26 @@ public class Player {
     }
 
     public void update(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             x -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            if (x < 0) x = 0;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             x += speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            if (x + bounds.width > 800) x = 800 - bounds.width;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             y += speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            if (y + bounds.height > 600) y = 600 - bounds.height;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             y -= speed * delta;
+            if (y < 0) y = 0;
+        }
+    
         bounds.setPosition(x, y);
     }
+    
 
     public Rectangle getBounds() {
         return bounds;
@@ -68,7 +80,6 @@ public class Player {
     }
 
     public void dispose() {
-        // Pas besoin de disposer des frames individuellement, juste le sprite sheet
         animation.getKeyFrames()[0].getTexture().dispose();
     }
 }
