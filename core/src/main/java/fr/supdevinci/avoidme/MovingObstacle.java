@@ -14,6 +14,7 @@ public class MovingObstacle {
     private float stateTime;
     private Rectangle bounds;
     private Vector2 velocity;
+    private boolean isMonster;
     private boolean isTest;
 
     public MovingObstacle(float width, float height, float speed) {
@@ -23,15 +24,24 @@ public class MovingObstacle {
     public MovingObstacle(float width, float height, float speed, boolean isTest) {
         this.isTest = isTest;
 
-        if (!isTest) {
-            String[] creatureFiles = {
-                    "creature.png", "creature-2.png", "creature-3.png", "creature-4.png",
-                    "creature-5.png", "creature-6.png", "creature-7.png", "creature-8.png",
-                    "creature-9.png", "creature-10.png"
-            };
-            String selectedCreature = creatureFiles[MathUtils.random(creatureFiles.length - 1)];
-            Texture spriteSheet = new Texture(selectedCreature);
+        // Déterminer si l'obstacle est un monstre ou une créature
+        isMonster = MathUtils.randomBoolean(0.3f); // 30% de chances d'être un monstre
+        String textureFile;
 
+        if (isMonster) {
+            textureFile = "monster.png";
+        } else {
+            // Sélectionner aléatoirement une des textures de créature
+            String[] creatureFiles = {
+                "creature.png", "creature-2.png", "creature-3.png", "creature-4.png",
+                "creature-5.png", "creature-6.png", "creature-7.png", "creature-8.png",
+                "creature-9.png", "creature-10.png"
+            };
+            textureFile = creatureFiles[MathUtils.random(creatureFiles.length - 1)];
+        }
+
+        if (!isTest) {
+            Texture spriteSheet = new Texture(textureFile);
             int frameWidth = spriteSheet.getWidth() / 4;
             int frameHeight = spriteSheet.getHeight();
             TextureRegion[][] tmp = TextureRegion.split(spriteSheet, frameWidth, frameHeight);
@@ -94,6 +104,10 @@ public class MovingObstacle {
 
     public Rectangle getBounds() {
         return bounds;
+    }
+
+    public boolean isMonster() {
+        return isMonster;
     }
 
     public void dispose() {

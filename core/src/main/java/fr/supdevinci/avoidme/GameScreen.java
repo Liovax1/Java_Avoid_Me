@@ -25,6 +25,7 @@ public class GameScreen extends ScreenAdapter {
     private boolean gameOver = false;
 
     private BitmapFont font;
+    private int score;
 
     public GameScreen(AvoidMeGame game) {
         this.game = game;
@@ -36,6 +37,7 @@ public class GameScreen extends ScreenAdapter {
         font = new BitmapFont();
         obstacles = new ArrayList<>();
         player = new Player(viewport);
+        score = 0; // Initialisation du score
     }
 
     @Override
@@ -56,8 +58,14 @@ public class GameScreen extends ScreenAdapter {
             while (it.hasNext()) {
                 MovingObstacle obstacle = it.next();
                 obstacle.update(delta);
+
                 if (obstacle.getBounds().overlaps(player.getBounds())) {
-                    gameOver = true;
+                    if (obstacle.isMonster()) {
+                        gameOver = true; // Fin de la partie si c'est un monstre
+                    } else {
+                        score++; // Incrémenter le score si c'est une créature
+                        it.remove(); // Supprimer l'obstacle touché
+                    }
                 }
             }
         }
@@ -76,6 +84,7 @@ public class GameScreen extends ScreenAdapter {
             obstacle.render(game.batch);
         }
         player.render(game.batch);
+        font.draw(game.batch, "Score: " + score, 10, 580); // Afficher le score
         if (gameOver) {
             font.draw(game.batch, "GAME OVER", 300, 400);
             font.draw(game.batch, "Appuyez sur R pour recommencer", 240, 370);
@@ -88,6 +97,7 @@ public class GameScreen extends ScreenAdapter {
         obstacles.clear();
         gameOver = false;
         spawnTimer = 0;
+        score = 0; // Réinitialiser le score
     }
 
     @Override

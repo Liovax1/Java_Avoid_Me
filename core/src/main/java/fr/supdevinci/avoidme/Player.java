@@ -25,9 +25,9 @@ public class Player {
     public Player(Viewport viewport, boolean isTest) {
         this.viewport = viewport;
         this.isTest = isTest;
-        x = 140;
-        y = 210;
-        bounds = new Rectangle(x, y, 64, 64);
+        x = Constants.WORLD_WIDTH / 2f - Constants.OBSTACLE_WIDTH / 2f;
+        y = Constants.WORLD_HEIGHT / 2f - Constants.OBSTACLE_HEIGHT / 2f;
+        bounds = new Rectangle(x, y, Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT);
 
         if (!isTest) {
             Texture spriteSheet = new Texture("player.png");
@@ -38,13 +38,12 @@ public class Player {
             System.arraycopy(tmp[0], 0, frames, 0, 4);
             animation = new Animation<>(0.1f, frames);
             stateTime = 0f;
-            bounds.setSize(frameWidth, frameHeight);
         }
     }
 
     public void reset() {
-        x = 140;
-        y = 210;
+        x = Constants.WORLD_WIDTH / 2f - Constants.OBSTACLE_WIDTH / 2f;
+        y = Constants.WORLD_HEIGHT / 2f - Constants.OBSTACLE_HEIGHT / 2f;
         bounds.setPosition(x, y);
     }
 
