@@ -17,6 +17,9 @@ public class Player {
     private Viewport viewport;
 
     private boolean isTest;
+    private int lives; // Nombre de vies
+    private boolean isHit; // Indique si le joueur a été touché
+    private float hitTimer; // Timer pour l'effet visuel après une collision
 
     public Player(Viewport viewport) {
         this(viewport, false); // Appel du constructeur principal
@@ -28,6 +31,9 @@ public class Player {
         x = Constants.WORLD_WIDTH / 2f - Constants.OBSTACLE_WIDTH / 2f;
         y = Constants.WORLD_HEIGHT / 2f - Constants.OBSTACLE_HEIGHT / 2f;
         bounds = new Rectangle(x, y, Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT);
+        lives = 3; // Initialisation des vies
+        isHit = false;
+        hitTimer = 0f;
 
         if (!isTest) {
             Texture spriteSheet = new Texture("player.png");
@@ -45,9 +51,20 @@ public class Player {
         x = Constants.WORLD_WIDTH / 2f - Constants.OBSTACLE_WIDTH / 2f;
         y = Constants.WORLD_HEIGHT / 2f - Constants.OBSTACLE_HEIGHT / 2f;
         bounds.setPosition(x, y);
+        lives = 3; // Réinitialiser les vies
+        isHit = false;
+        hitTimer = 0f;
     }
 
     public void update(float delta) {
+        if (isHit) {
+            hitTimer += delta;
+            if (hitTimer > 0.5f) { // Effet visuel dure 0.5 seconde
+                isHit = false;
+                hitTimer = 0f;
+            }
+        }
+
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             x -= Constants.PLAYER_SPEED * delta;
             if (x < 0) x = 0;
@@ -68,6 +85,17 @@ public class Player {
         bounds.setPosition(x, y);
     }
 
+    public void loseLife() {
+        if (lives > 0) {
+            lives--;
+            isHit = true; // Déclencher l'effet visuel
+        }
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
     public Rectangle getBounds() {
         return bounds;
     }
@@ -76,7 +104,12 @@ public class Player {
         if (!isTest && animation != null) {
             stateTime += Gdx.graphics.getDeltaTime();
             TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
+
+            if (isHit) {
+                batch.setColor(1, 0, 0, 1); // Couleur rouge pour l'effet visuel
+            }
             batch.draw(currentFrame, x, y, bounds.width, bounds.height);
+            batch.setColor(1, 1, 1, 1); // Réinitialiser la couleur
         }
     }
 

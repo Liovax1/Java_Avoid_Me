@@ -61,7 +61,11 @@ public class GameScreen extends ScreenAdapter {
 
                 if (obstacle.getBounds().overlaps(player.getBounds())) {
                     if (obstacle.isMonster()) {
-                        gameOver = true; // Fin de la partie si c'est un monstre
+                        player.loseLife();
+                        it.remove(); // Supprimer le monstre après collision
+                        if (player.getLives() <= 0) {
+                            gameOver = true; // Fin de la partie si plus de vies
+                        }
                     } else {
                         score++; // Incrémenter le score si c'est une créature
                         it.remove(); // Supprimer l'obstacle touché
@@ -85,6 +89,7 @@ public class GameScreen extends ScreenAdapter {
         }
         player.render(game.batch);
         font.draw(game.batch, "Score: " + score, 10, 580); // Afficher le score
+        font.draw(game.batch, "Lives: " + player.getLives(), 10, 550); // Afficher les vies
         if (gameOver) {
             font.draw(game.batch, "GAME OVER", 300, 400);
             font.draw(game.batch, "Appuyez sur R pour recommencer", 240, 370);
