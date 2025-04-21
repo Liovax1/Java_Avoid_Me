@@ -14,7 +14,7 @@ public class AvoidMeGame extends Game {
 
     @Override
     public void render() {
-        super.render(); // appelle le screen actif (GameScreen)
+        super.render();
     }
 
     @Override

@@ -3,21 +3,25 @@ package fr.supdevinci.avoidme;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 
-/**
- * Tests unitaires pour la classe Player.
- */
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+
+import org.mockito.Mockito;
+
 public class PlayerTest {
 
     private Player player;
 
     @Before
     public void setUp() {
-        OrthographicCamera camera = new OrthographicCamera();
-        StretchViewport viewport = new StretchViewport(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, camera);
-        player = new Player(viewport);
+        Gdx.input = Mockito.mock(Input.class); // simule les touches clavier
+
+        Viewport viewport = new StretchViewport(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, new OrthographicCamera());
+        player = new Player(viewport, true); // Mode test
     }
 
     @Test
@@ -35,15 +39,13 @@ public class PlayerTest {
 
     @Test
     public void testStayInsideLeftBorder() {
-        player.reset();
-        player.update(100); // simulate long left movement
+        player.update(100); // simulate movement
         assertTrue(player.getBounds().x >= 0);
     }
 
     @Test
     public void testStayInsideBottomBorder() {
-        player.reset();
-        player.update(100); // simulate long down movement
+        player.update(100); // simulate movement
         assertTrue(player.getBounds().y >= 0);
     }
 }
