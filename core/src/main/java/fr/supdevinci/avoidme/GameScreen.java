@@ -37,11 +37,11 @@ public class GameScreen extends ScreenAdapter {
         font = new BitmapFont();
         obstacles = new ArrayList<>();
         player = new Player(viewport);
-        score = 0; // Initialisation du score
+        score = 0;
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta) { // boucle principale
         if (!gameOver) {
             player.update(delta);
 
@@ -62,13 +62,13 @@ public class GameScreen extends ScreenAdapter {
                 if (obstacle.getBounds().overlaps(player.getBounds())) {
                     if (obstacle.isMonster()) {
                         player.loseLife();
-                        it.remove(); // Supprimer le monstre après collision
+                        it.remove();
                         if (player.getLives() <= 0) {
-                            gameOver = true; // Fin de la partie si plus de vies
+                            gameOver = true;
                         }
                     } else {
-                        score++; // Incrémenter le score si c'est une créature
-                        it.remove(); // Supprimer l'obstacle touché
+                        score++;
+                        it.remove();
                     }
                 }
             }
@@ -88,8 +88,8 @@ public class GameScreen extends ScreenAdapter {
             obstacle.render(game.batch);
         }
         player.render(game.batch);
-        font.draw(game.batch, "Score: " + score, 10, 580); // Afficher le score
-        font.draw(game.batch, "Lives: " + player.getLives(), 10, 550); // Afficher les vies
+        font.draw(game.batch, "Score: " + score, 10, 580);
+        font.draw(game.batch, "Lives: " + player.getLives(), 10, 550);
         if (gameOver) {
             font.draw(game.batch, "GAME OVER", 300, 400);
             font.draw(game.batch, "Appuyez sur R pour recommencer", 240, 370);
@@ -102,7 +102,7 @@ public class GameScreen extends ScreenAdapter {
         obstacles.clear();
         gameOver = false;
         spawnTimer = 0;
-        score = 0; // Réinitialiser le score
+        score = 0;
     }
 
     @Override

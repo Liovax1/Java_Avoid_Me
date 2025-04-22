@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class AvoidMeGame extends Game {
-    public SpriteBatch batch;
+    public SpriteBatch batch; //pour rendu
 
     @Override
     public void create() {

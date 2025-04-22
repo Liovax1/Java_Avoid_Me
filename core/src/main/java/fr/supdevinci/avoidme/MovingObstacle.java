@@ -18,20 +18,18 @@ public class MovingObstacle {
     private boolean isTest;
 
     public MovingObstacle(float width, float height, float speed) {
-        this(width, height, speed, false); // Par défaut, pas en mode test
+        this(width, height, speed, false);
     }
 
     public MovingObstacle(float width, float height, float speed, boolean isTest) {
         this.isTest = isTest;
 
-        // Déterminer si l'obstacle est un monstre ou une créature
-        isMonster = MathUtils.randomBoolean(0.3f); // 30% de chances d'être un monstre
+        isMonster = MathUtils.randomBoolean(0.5f);
         String textureFile;
 
         if (isMonster) {
             textureFile = "monster.png";
         } else {
-            // Sélectionner aléatoirement une des textures de créature
             String[] creatureFiles = {
                 "creature.png", "creature-2.png", "creature-3.png", "creature-4.png",
                 "creature-5.png", "creature-6.png", "creature-7.png", "creature-8.png",
@@ -83,7 +81,7 @@ public class MovingObstacle {
         bounds.x += velocity.x * delta;
         bounds.y += velocity.y * delta;
 
-        // Empêcher l'obstacle de sortir des limites du monde
+        // empêcher l'obstacle de sortir des limites du monde
         if (bounds.x < -Constants.OBSTACLE_WIDTH)
             bounds.x = -Constants.OBSTACLE_WIDTH;
         if (bounds.x > Constants.WORLD_WIDTH + Constants.OBSTACLE_WIDTH)

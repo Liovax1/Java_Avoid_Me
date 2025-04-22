@@ -1,7 +1,7 @@
 package fr.supdevinci.avoidme;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation; //
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -17,12 +17,12 @@ public class Player {
     private Viewport viewport;
 
     private boolean isTest;
-    private int lives; // Nombre de vies
-    private boolean isHit; // Indique si le joueur a été touché
-    private float hitTimer; // Timer pour l'effet visuel après une collision
+    private int lives;
+    private boolean isHit;
+    private float hitTimer;
 
     public Player(Viewport viewport) {
-        this(viewport, false); // Appel du constructeur principal
+        this(viewport, false); // appel constructeur principal
     }
 
     public Player(Viewport viewport, boolean isTest) {
@@ -31,7 +31,7 @@ public class Player {
         x = Constants.WORLD_WIDTH / 2f - Constants.OBSTACLE_WIDTH / 2f;
         y = Constants.WORLD_HEIGHT / 2f - Constants.OBSTACLE_HEIGHT / 2f;
         bounds = new Rectangle(x, y, Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT);
-        lives = 3; // Initialisation des vies
+        lives = 3;
         isHit = false;
         hitTimer = 0f;
 
@@ -51,7 +51,7 @@ public class Player {
         x = Constants.WORLD_WIDTH / 2f - Constants.OBSTACLE_WIDTH / 2f;
         y = Constants.WORLD_HEIGHT / 2f - Constants.OBSTACLE_HEIGHT / 2f;
         bounds.setPosition(x, y);
-        lives = 3; // Réinitialiser les vies
+        lives = 3;
         isHit = false;
         hitTimer = 0f;
     }
@@ -59,7 +59,7 @@ public class Player {
     public void update(float delta) {
         if (isHit) {
             hitTimer += delta;
-            if (hitTimer > 0.5f) { // Effet visuel dure 0.5 seconde
+            if (hitTimer > 0.3f) { 
                 isHit = false;
                 hitTimer = 0f;
             }
@@ -88,7 +88,7 @@ public class Player {
     public void loseLife() {
         if (lives > 0) {
             lives--;
-            isHit = true; // Déclencher l'effet visuel
+            isHit = true;
         }
     }
 
@@ -106,10 +106,10 @@ public class Player {
             TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
 
             if (isHit) {
-                batch.setColor(1, 0, 0, 1); // Couleur rouge pour l'effet visuel
+                batch.setColor(1, 0, 0, 1);
             }
             batch.draw(currentFrame, x, y, bounds.width, bounds.height);
-            batch.setColor(1, 1, 1, 1); // Réinitialiser la couleur
+            batch.setColor(1, 1, 1, 1);
         }
     }
 

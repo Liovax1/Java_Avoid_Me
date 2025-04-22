@@ -12,7 +12,7 @@ public class MovingObstacleTest {
 
     @Before
     public void setUp() {
-        // Initialisation de MovingObstacle en mode test
+        // Init de MovingObstacle en mode test
         movingObstacle = new MovingObstacle(Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT, Constants.OBSTACLE_SPEED, true);
     }
 
@@ -27,7 +27,7 @@ public class MovingObstacleTest {
     @Test
     public void testUpdatePosition() {
         Rectangle initialBounds = new Rectangle(movingObstacle.getBounds());
-        movingObstacle.update(1f); // Simule une mise à jour d'une seconde
+        movingObstacle.update(1f);
         Rectangle updatedBounds = movingObstacle.getBounds();
 
         assertNotEquals(initialBounds.x, updatedBounds.x);
@@ -38,7 +38,7 @@ public class MovingObstacleTest {
     public void testBoundsStayWithinWorld() {
         movingObstacle.update(100f); // Simule un déplacement important
         Rectangle bounds = movingObstacle.getBounds();
-
+        //limites du jeu
         assertTrue(bounds.x >= -Constants.OBSTACLE_WIDTH);
         assertTrue(bounds.x <= Constants.WORLD_WIDTH + Constants.OBSTACLE_WIDTH);
         assertTrue(bounds.y >= -Constants.OBSTACLE_HEIGHT);
